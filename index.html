@@ -352,7 +352,7 @@
             font-weight: bold;
         }
 
-       -telegram {
+        .highlight-telegram {
             color: #2e86c1;
             font-weight: bold;
         }
@@ -512,8 +512,7 @@
                     <li style="color: #ff4500;">bảo hành 250 Ngày / Lỗi Một Đổi một</li>
                     <li>Chẳng có bất kỳ hạn chế nào đối với IP, blacklist, Ban, Paypal</li>
                     <li>Không bị giới hạn nội dung, không kết nối với bất kỳ trang web nào khác</li>
-                    <li>Không có hạn</li>
-                </ul>
+                    <li>Không có hạn</ul>
                 <button onclick="showBankInfo('$222.222')">Mua ngay</button>
             </div>
         </div>
@@ -525,7 +524,7 @@
     <div id="modal">
         <div id="modalContent">
             <div id="bankInfo">
-						<h2>Thông tin ngân hàng</h2>
+                <h2>Thông tin ngân hàng</h2>
                 <p>Số tài khoản: <span id="accountNumber">638623456789</span></p>
                 <p>Ngân hàng: <span id="bankName">Ngân hàng MB Bank</span></p>
                 <div id="qrCode">
@@ -540,21 +539,11 @@
                 <input type="text" id="telegram-id" name="telegram-id" placeholder="Username Telegram" required>
                 <select id="package" name="package" required>
                     <option value="" disabled selected>Chọn gói mua</option>
-                    <option value="Gói 
-										49.999vnd">Gói
-									  49.999vnd</option>
-                    <option value="Gói
-										66.666vnd">Gói
-									  66.666vnd</option>
-                    <option value="Gói
-										88.888vnd">Gói
-									  88.888vnd</option>
-									  <option value="Gói
-										140.000vnd">Gói
-									  140.000vnd</option>
-										<option value="Gói 
-										222.222vnd">Gói
-									  222.222vnd</option>
+                    <option value="Gói 49.999vnd">Gói 49.999vnd</option>
+                    <option value="Gói 66.666vnd">Gói 66.666vnd</option>
+                    <option value="Gói 88.888vnd">Gói 88.888vnd</option>
+                    <option value="Gói 140.000vnd">Gói 140.000vnd</option>
+                    <option value="Gói 222.222vnd">Gói 222.222vnd</option>
                 </select>
                 <button type="submit">Gửi</button>
             </form>
@@ -761,9 +750,9 @@
             const selectedPackage = document.getElementById('package').value;
 
             const packageDurations = {
-                'Gói $7.00 USD': 3 * 24 * 60 * 60, // 3 days in seconds
-                'Gói 89,000vnd': 7 * 24 * 60 * 60, // 7 days in seconds
-                'Gói $10.00 USD': 30 * 24 * 60 * 60 // 30 days in seconds
+                'Gói $49.999vnd': 3 * 24 * 60 * 60, // 3 days in seconds
+                'Gói 66.666vnd': 7 * 24 * 60 * 60, // 7 days in seconds
+                'Gói $88.888vnd': 30 * 24 * 60 * 60 // 30 days in seconds
             };
 
             if (uid && telegramId && selectedPackage) {
@@ -781,7 +770,7 @@
                 });
 
                 saveOrders(orders);
-                swal("Mua hàng thành công!", "Đơn hàng của bạn đã được lưu Và Đang Trong Quá Trình Chờ Duyệt.", "success");
+                swal("Mua hàng thành công!", "Đơn hàng của bạn đã được lưu và đang trong quá trình chờ duyệt.", "success");
 
                 const message = `Đơn hàng mới:\nGói: ${selectedPackage}\nUID thiết bị: ${uid}\nTelegram ID: ${telegramId}\nNgày: ${new Date().toLocaleDateString()}\nGiờ: ${new Date().toLocaleTimeString()}`;
                 sendTelegramMessage(message);
