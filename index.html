@@ -1,0 +1,897 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHOST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        /* Login Modal Styling */
+        #loginModal,
+        #registerModal,
+        #contactModal,
+        #aboutUsModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Đảm bảo z-index đủ cao để nằm trên các thành phần khác */
+        }
+
+        #loginModalContent,
+        #registerModalContent,
+        #contactModalContent,
+        #aboutUsModalContent {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 1001; /* Đảm bảo nội dung modal ở trên lớp nền mờ */
+        }
+
+        #loginModalContent h2,
+        #registerModalContent h2,
+        #contactModalContent h2,
+        #aboutUsModalContent h2 {
+            margin-top: 0;
+        }
+
+        #loginModalContent input,
+        #registerModalContent input {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        #loginModalContent button,
+        #registerModalContent button,
+        #contactModalContent button,
+        #aboutUsModalContent button {
+            background: #4a56e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #loginModalContent button:hover,
+        #registerModalContent button:hover,
+        #contactModalContent button:hover,
+        #aboutUsModalContent button:hover {
+            background: #6d5eac;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6d5eac, #4a56e2);
+            color: #fff;
+            padding: 15px 0;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo img {
+            max-height: 100px;
+            margin-right: 20px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+        }
+
+        .right-menu a {
+            background: #ffd700;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .right-menu a:hover {
+            background: #ffb300;
+        }
+
+        .card-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+
+        .card {
+            background: white;
+            border: none;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px;
+            width: calc(30% - 40px);
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .card h2 {
+            color: #4a56e2;
+            margin-top: 0;
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card ul li {
+            margin: 10px 0;
+            color: #ff4500;  /* Màu cam đậm cho thông điệp quan trọng */
+        }
+
+        .card button {
+            background: #4a56e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .card button:hover {
+            background: #6d5eac;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #4a56e2;
+            color: #fff;
+            position: relative;
+        }
+
+        footer a {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            color: #ffb300;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: calc(50% - 40px);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .right-menu {
+                display: none;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .card {
+                width: calc(100% - 40px);
+            }
+        }
+
+        /* Modal Styling */
+        #modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modalContent {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+            width: 400px;
+            text-align: center;
+        }
+
+        #modalContent input,
+        #modalContent select,
+        #setDeliveryTimeInput {
+            width: calc(100% - 40px);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        #modalContent button,
+        #setDeliveryTimeButton {
+            background: #4a56e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #modalContent button:hover,
+        #setDeliveryTimeButton:hover {
+            background: #6d5eac;
+        }
+
+        #qrCode img {
+            width: 200px;
+            height: 200px;
+            margin: 20px 0;
+        }
+
+        /* Lịch sử đơn hàng Modal */
+        #orderHistoryModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
+
+        #orderHistoryModalContent {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.15);
+            width: 90%;
+            max-width: 450px; /* Giới hạn chiều rộng tối đa */
+            text-align: center;
+            overflow-y: auto; /* Thêm cuộn dọc */
+            max-height: 90vh; /* Giới hạn chiều cao tối đa */
+        }
+
+        .order-item {
+            display: flex;
+            flex-direction: column; /* Chuyển sang cột */
+            align-items: flex-start; /* Canh trái */
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+        .order-item-p {
+            margin: 2px 0;
+        }
+
+        .order-item button {
+            background: #4a56e2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .order-item button:hover {
+            background: #6d5eac;
+        }
+
+        .input-time {
+            flex-grow: 1;
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .highlight-uid {
+            color: #ff4500;
+            font-weight: bold;
+        }
+
+       -telegram {
+            color: #2e86c1;
+            font-weight: bold;
+        }
+
+        .highlight-package {
+            color: #28b463;
+            font-weight: bold;
+        }
+
+        .status-approved {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: red;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal">
+        <div id="loginModalContent">
+            <h2>Đăng nhập</h2>
+            <input type="text" id="username" placeholder="Tên người dùng" required>
+            <input type="password" id="password" placeholder="Mật khẩu" required>
+            <button onClick="handleLogin()">Đăng nhập</button>
+            <p>Chưa có tài khoản? <a href="#" onClick="showRegisterModal()">Đăng ký</a></p>
+        </div>
+    </div>
+    <!-- Register Modal -->
+    <div id="registerModal">
+        <div id="registerModalContent">
+            <h2>Đăng ký</h2>
+            <input type="text" id="reg-username" placeholder="Tên người dùng" required>
+            <input type="email" id="reg-email" placeholder="Email" required>
+            <input type="password" id="reg-password" placeholder="Mật khẩu" required>
+            <button onClick="handleRegister()">Đăng ký</button>
+            <p>Đã có tài khoản? <a href="#" onClick="showLoginModal()">Đăng nhập</a></p>
+        </div>
+    </div>
+    <!-- Contact Modal -->
+    <div id="contactModal">
+        <div id="contactModalContent">
+            <h2>Liên hệ</h2>
+            <p>Admin: Telegram @cauchujesu</p>
+            <button onclick="closeContactModal()">Đóng</button>
+        </div>
+    </div>
+    <!-- About Us Modal -->
+    <div id="aboutUsModal">
+        <div id="aboutUsModalContent">
+            <h2>Về chúng tôi</h2>
+            <p>DVCIPA - Web Bán Chứng Chỉ Uy Tín Chất Lượng</p>
+            <button onclick="closeAboutUsModal()">Đóng</button>
+        </div>
+    </div>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="https://i.imgur.com/ww6lZyZ.jpeg" alt="Logo" />
+            </div>
+            <ul>
+                <li><a href="#" onclick="reloadPage()">Trang chủ</a></li>
+                <!-- Trang chủ -->
+                <li><a href="#" onclick="showAboutUsModal()">Về chúng tôi</a></li>
+                <!-- Về chúng tôi - Mục mới thêm -->
+                <li><a href="#" onclick="showContactModal()">Liên hệ</a></li>
+                <!-- Liên hệ - Mục mới thêm -->
+                <li><a href="https://example.com/get-uid" target="_blank">Get UID</a></li>
+                <!-- Get UID -->
+                <li><a href="#" onClick="showOrderHistoryPopup()">Lịch sử đơn hàng</a></li>
+                <li class="right-menu"><a href="#" onClick="showLoginModal()">Đăng nhập</a></li>
+                <li class="right-menu"><a href="#" onClick="showRegisterModal()">Đăng ký</a></li>
+                <li id="reviewOrdersTab" class="right-menu" style="display: none;"><a href="#" onclick="showReviewOrdersModal()">Duyệt đơn hàng</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main id="mainContainer" style="display: none;">
+        <!-- Your main content -->
+        <div class="card-container">
+            <div class="card">
+                <h2>Gói 1 49.999đ/Một Thiết Bị/một năm</h2>
+                <ul>
+                    <li>Gói dành cho thiết bị Xs Trở lên</li>
+                    <li>Chẳng cần phải nâng cấp P2P Certificates lên</li>
+                    <li>Không bị giới hạn IP Blacklist, AI, Apple Ban, ...</li>
+                    <li>Chẳng cần di chuyển</li>
+                    <li>Chẳng cần phải mua thiết bị hay nâng cấp bất kỳ máy tính nào</li>
+                    <li>Không có hạn</li>
+                </ul>
+                <button onclick="showBankInfo('$49.999vnd')">Mua ngay</button>
+            </div>
+            <div class="card">
+                <h2>Gói 2 66.666/năm</h2>
+                <p>Hỗ Trợ Bảo Hành 90 Ngày / Lỗi một đổi một</p>
+                <ul>
+                    <li>Không bị giới hạn IP Blacklist, AI, Apple Ban, Thiết bị bị phạt</li>
+                    <li>Chẳng cần phải trang bị thiết bị mới nhất</li>
+                    <li>Sử dụng trên tất cả các hệ điều hành: Mac, Linux, Windows</li>
+                    <li>An toàn cho cả PC, Mac, Điện thoại, Tablet, ALL</li>
+                    <li>Chẳng cần phải chờ đợi team để sửa chữa</li>
+                    <li>Không có hạn</li>
+                </ul>
+                <button onclick="showBankInfo('66.666vnd')">Mua ngay</button>
+            </div>
+            <div class="card">
+                <h2>Gói 3 88.888 /user paid via Paypal</h2>
+                <ul>
+                    <li style="color: #ff4500;">Bảo Hành 120 Ngày / Lỗi Một Đổi một</li>
+                    <li>Chẳng có bất kỳ hạn chế nào đối với IP, blacklist, Ban, Paypal</li>
+                    <li>Không bị giới hạn nội dung, không kết nối với bất kỳ trang web nào khác</li>
+                    <li>Không có hạn</li>
+                </ul>
+                <button onclick="showBankInfo('$88.888vnd')">Mua ngay</button>
+            </div>
+            <div class="card">
+                <h2>Gói 4 140.000 /user paid via Paypal</h2>
+                <ul>
+                    <li style="color: #ff4500;">bảo hành 150 Ngày / lỗi một đổi một </li>
+                    <li>Chẳng có bất kỳ hạn chế nào đối với IP, blacklist, Ban, Paypal</li>
+                    <li>Không bị giới hạn nội dung, không kết nối với bất kỳ trang web nào khác</li>
+                    <li>Không có hạn</li>
+                </ul>
+                <button onclick="showBankInfo('$140.000')">Mua ngay</button>
+            </div>
+            <div class="card">
+                <h2>Gói 5 [ Lấy Ngay ] 222.222/user paid via Paypal</h2>
+                <ul>
+                    <li style="color: #ff4500;">bảo hành 250 Ngày / Lỗi Một Đổi một</li>
+                    <li>Chẳng có bất kỳ hạn chế nào đối với IP, blacklist, Ban, Paypal</li>
+                    <li>Không bị giới hạn nội dung, không kết nối với bất kỳ trang web nào khác</li>
+                    <li>Không có hạn</li>
+                </ul>
+                <button onclick="showBankInfo('$222.222')">Mua ngay</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>DVC IPA - M.O.D GAME IOS <a href="#">DVC IPA</a> | Telegram: <a href="#">DVC IPA</a></p>
+    </footer>
+    <!-- Modal HTML -->
+    <div id="modal">
+        <div id="modalContent">
+            <div id="bankInfo">
+						<h2>Thông tin ngân hàng</h2>
+                <p>Số tài khoản: <span id="accountNumber">638623456789</span></p>
+                <p>Ngân hàng: <span id="bankName">Ngân hàng MB Bank</span></p>
+                <div id="qrCode">
+                    <img src="" alt="QR Code">
+                </div>
+                <button onclick="copyBankInfo()">Sao chép</button>
+                <button onclick="showForm()">Tiếp theo</button>
+            </div>
+            <form id="submit-form" style="display: none;" onsubmit="handleOrderSubmit(event)">
+                <h2>Nhập thông tin của bạn</h2>
+                <input type="text" id="device-uid" name="device-uid" placeholder="UID Thiết bị" required>
+                <input type="text" id="telegram-id" name="telegram-id" placeholder="Username Telegram" required>
+                <select id="package" name="package" required>
+                    <option value="" disabled selected>Chọn gói mua</option>
+                    <option value="Gói 
+										49.999vnd">Gói
+									  49.999vnd</option>
+                    <option value="Gói
+										66.666vnd">Gói
+									  66.666vnd</option>
+                    <option value="Gói
+										88.888vnd">Gói
+									  88.888vnd</option>
+									  <option value="Gói
+										140.000vnd">Gói
+									  140.000vnd</option>
+										<option value="Gói 
+										222.222vnd">Gói
+									  222.222vnd</option>
+                </select>
+                <button type="submit">Gửi</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Order History Modal -->
+    <div id="orderHistoryModal">
+        <div id="orderHistoryModalContent">
+            <h2>Lịch sử đơn hàng</h2>
+            <ul id="orderHistoryList"></ul>
+            <button onclick="closeOrderHistoryPopup()">Đóng</button>
+        </div>
+    </div>
+
+    <!-- Review Orders Modal for Admin -->
+    <div id="reviewOrdersModal">
+        <div id="reviewOrdersModalContent">
+            <h2>Duyệt đơn hàng</h2>
+            <ul id="reviewOrdersList"></ul>
+            <button onclick="closeReviewOrdersModal()">Đóng</button>
+        </div>
+    </div>
+
+    <script>
+        let isLoggedIn = false;
+        let isAdmin = false;
+        let currentOrderUID = null;
+
+        // Hàm kiểm tra trạng thái đăng nhập
+        function checkLoginStatus() {
+            if (isLoggedIn) {
+                document.getElementById('mainContainer').style.display = 'block';
+                if (isAdmin) {
+                    document.getElementById('reviewOrdersTab').style.display = 'block';
+                }
+            } else {
+                showLoginModal();
+            }
+        }
+
+        // Hàm lưu trữ các đơn hàng vào localStorage
+        function saveOrders(orders) {
+            localStorage.setItem('orders', JSON.stringify(orders));
+        }
+
+        // Show/Hide modals
+        function showLoginModal() {
+            hideAllModals(); // Ẩn tất cả các modals trước khi hiển thị cái mới
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function showRegisterModal() {
+            hideAllModals(); // Ẩn tất cả các modals trước khi hiển thị cái mới
+            document.getElementById('registerModal').style.display = 'flex';
+        }
+
+        function showContactModal() {
+            hideAllModals(); // Ẩn tất cả các modals trước khi hiển thị cái mới
+            document.getElementById('contactModal').style.display = 'flex';
+        }
+
+        function closeContactModal() {
+            document.getElementById('contactModal').style.display = 'none';
+        }
+
+        function showAboutUsModal() {
+            hideAllModals(); // Ẩn tất cả các modals trước khi hiển thị cái mới
+            document.getElementById('aboutUsModal').style.display = 'flex';
+        }
+
+        function closeAboutUsModal() {
+            document.getElementById('aboutUsModal').style.display = 'none';
+        }
+
+        function showReviewOrdersModal() {
+            hideAllModals();
+            document.getElementById('reviewOrdersModal').style.display = 'flex';
+            updateOrdersList();
+        }
+
+        function closeReviewOrdersModal() {
+            document.getElementById('reviewOrdersModal').style.display = 'none';
+        }
+
+        function hideAllModals() {
+            const modals = [
+                document.getElementById('loginModal'),
+                document.getElementById('registerModal'),
+                document.getElementById('contactModal'),
+                document.getElementById('aboutUsModal'),
+                document.getElementById('modal'),
+                document.getElementById('orderHistoryModal'),
+                document.getElementById('reviewOrdersModal')
+            ];
+            modals.forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        function reloadPage() {
+            location.reload();
+        }
+
+        function handleLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (username === 'admin' && password === '1') { // Tài khoản admin
+                isLoggedIn = true;
+                isAdmin = true;
+                hideAllModals();
+                document.getElementById('mainContainer').style.display = 'block';
+                document.getElementById('reviewOrdersTab').style.display = 'block';
+                swal("Đăng nhập thành công!", "Chào mừng Admin", "success");
+            } else {
+                const storedUser = JSON.parse(localStorage.getItem(username));
+                if (storedUser && storedUser.password === password) {
+                    isLoggedIn = true;
+                    hideAllModals();
+                    document.getElementById('mainContainer').style.display = 'block';
+                    const message = `Người dùng đã đăng nhập: ${username}\nEmail: ${storedUser.email}`;
+                    sendTelegramMessage(message);
+                    swal("Đăng nhập thành công!", `Chào mừng, ${username}`, "success");
+                } else {
+                    swal("Lỗi!", "Tên người dùng hoặc mật khẩu không chính xác!", "error");
+                }
+            }
+        }
+
+        function handleRegister() {
+            const username = document.getElementById('reg-username').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            if (username && email && password) {
+                const user = {
+                    username: username,
+                    email: email,
+                    password: password
+                };
+                localStorage.setItem(username, JSON.stringify(user));
+                swal("Đăng ký thành công!", "Bây giờ bạn có thể đăng nhập.", "success").then(() => {
+                    showLoginModal();
+                });
+            } else {
+                swal("Lỗi!", "Vui lòng nhập đủ thông tin.", "error");
+            }
+        }
+
+        function showBankInfo(price) {
+            const qrCodeUrls = {
+                '$49.999vnd': 'https://i.imgur.com/WE6ceXl.jpeg', // Replace with actual URLs
+                '66.666vnd': 'https://i.imgur.com/Q0XBQkK.jpeg',
+                '$88.888vnd': 'https://i.imgur.com/3VjYmGD.jpeg',
+                '$140.000vnd': 'https://i.imgur.com/OIbvujC.jpeg',
+                '$222.222vnd': 'https://i.imgur.com/n7ILEdC.jpeg'
+            };
+            hideAllModals();
+            document.getElementById("modal").style.display = "flex";
+            document.getElementById("bankInfo").style.display = "block";
+            document.getElementById("submit-form").style.display = "none";
+            document.querySelector("#qrCode img").src = qrCodeUrls[price];
+            document.getElementById('package').value = price;
+        }
+
+        function copyBankInfo() {
+            const accountNumber = document.getElementById("accountNumber").innerText;
+            const bankName = document.getElementById("bankName").innerText;
+            const textToCopy = `Số tài khoản: ${accountNumber}\nNgân hàng: ${bankName}`;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                swal("Đã sao chép!", "Thông tin ngân hàng đã được sao chép.", "success");
+            });
+        }
+
+        function showForm() {
+            document.getElementById("bankInfo").style.display = "none";
+            document.getElementById("submit-form").style.display = "block";
+        }
+
+        function sendTelegramMessage(message) {
+            const botToken = "7934301784:AAFDWztuv3ij6yHXGC25ACH9dNusMvnhuII"; // Replace with your actual bot token
+            const chatId = "-1002361611874"; // Replace with your actual chat ID
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            fetch(url, {
+                method: "GET",
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    console.log("Message sent to Telegram.");
+                } else {
+                    console.log("Failed to send message to Telegram.");
+                }
+            })
+            .catch(error => console.log("Error:", error));
+        }
+
+        function handleOrderSubmit(event) {
+            event.preventDefault();
+
+            const uid = document.getElementById('device-uid').value;
+            const telegramId = document.getElementById('telegram-id').value;
+            const selectedPackage = document.getElementById('package').value;
+
+            const packageDurations = {
+                'Gói $7.00 USD': 3 * 24 * 60 * 60, // 3 days in seconds
+                'Gói 89,000vnd': 7 * 24 * 60 * 60, // 7 days in seconds
+                'Gói $10.00 USD': 30 * 24 * 60 * 60 // 30 days in seconds
+            };
+
+            if (uid && telegramId && selectedPackage) {
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                orders.push({
+                    packageName: selectedPackage,
+                    deviceUID: uid,
+                    telegramId: telegramId,
+                    date: new Date().toLocaleDateString(),
+                    time: new Date().toLocaleTimeString(),
+                    status: 'Chưa duyệt',
+                    remainingTime: packageDurations[selectedPackage],
+                    reviewTime: 0,
+                    deliveryTime: null // Thời gian giao hàng mới
+                });
+
+                saveOrders(orders);
+                swal("Mua hàng thành công!", "Đơn hàng của bạn đã được lưu Và Đang Trong Quá Trình Chờ Duyệt.", "success");
+
+                const message = `Đơn hàng mới:\nGói: ${selectedPackage}\nUID thiết bị: ${uid}\nTelegram ID: ${telegramId}\nNgày: ${new Date().toLocaleDateString()}\nGiờ: ${new Date().toLocaleTimeString()}`;
+                sendTelegramMessage(message);
+
+                hideAllModals();
+                showOrderHistoryPopup();
+            } else {
+                swal("Lỗi!", "Vui lòng nhập đầy đủ thông tin.", "error");
+            }
+        }
+
+        function showOrderHistoryPopup() {
+            const orderHistoryList = document.getElementById('orderHistoryList');
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+            orderHistoryList.innerHTML = '';
+
+            if (orders.length === 0) {
+                orderHistoryList.innerHTML = '<li>Chưa có lịch sử đơn hàng.</li>';
+            } else {
+                orders.forEach(order => {
+                    const deliveryInfo = order.deliveryTime ? `Thời gian nhận hàng: ${new Date(order.deliveryTime).toLocaleString()}` : "";
+                    const statusClass = order.status === 'Đã duyệt' ? 'status-approved' : 'status-pending';
+                    const deleteButton = order.status === 'Đã duyệt' ? '' : `<button onclick="deleteOrder('${order.deviceUID}')">Xóa</button>`;
+                    const listItem = document.createElement('li');
+                    listItem.className = 'order-item';
+                    listItem.innerHTML = `
+                        <p class="order-item-p highlight-package">Gói: ${order.packageName}</p>
+                        <p class="order-item-p highlight-uid">UID thiết bị: ${order.deviceUID}</p>
+                        <p class="order-item-p highlight-telegram">Telegram ID: ${order.telegramId}</p>
+                        <p class="order-item-p">Ngày mua: ${order.date}</p>
+                        <p class="order-item-p">Giờ mua: ${order.time}</p>
+                        <p class="order-item-p ${statusClass}">Trạng thái: ${order.status}</p>
+                        <p class="order-item-p">${deliveryInfo}</p>
+                        ${deleteButton}
+                    `;
+                    orderHistoryList.appendChild(listItem);
+                });
+            }
+
+            document.getElementById('orderHistoryModal').style.display = 'flex';
+        }
+
+        function updateOrdersList() {
+            const reviewOrdersList = document.getElementById('reviewOrdersList');
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+            reviewOrdersList.innerHTML = '';
+
+            if (orders.length === 0) {
+                reviewOrdersList.innerHTML = '<li>Không có đơn hàng nào.</li>';
+            } else {
+                orders.forEach(order => {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'order-item';
+                    const deleteButton = `<button onclick="deleteOrder('${order.deviceUID}')">Xóa</button>`;
+                    listItem.innerHTML = `
+                        <p class="order-item-p highlight-package">Gói: ${order.packageName}</p>
+                        <p class="order-item-p highlight-uid">UID thiết bị: ${order.deviceUID}</p>
+                        <p class="order-item-p highlight-telegram">Telegram ID: ${order.telegramId}</p>
+                        <p class="order-item-p">Ngày mua: ${order.date}</p>
+                        <p class="order-item-p">Giờ mua: ${order.time}</p>
+                        <p class="order-item-p">Trạng thái: ${order.status}</p>
+                        <input type='datetime-local' class='input-time' id='deliveryTimeInput-${order.deviceUID}'>
+                        <button onclick="approveOrder('${order.deviceUID}')">Duyệt</button> 
+                        <button onclick="submitDeliveryTime('${order.deviceUID}')">Gửi</button>
+                        ${deleteButton}
+                    `;
+                    reviewOrdersList.appendChild(listItem);
+                });
+            }
+        }
+
+        function approveOrder(deviceUID) {
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            let orderToApprove = orders.find(order => order.deviceUID === deviceUID);
+            if (orderToApprove) {
+                orderToApprove.status = 'Đã duyệt';
+                orderToApprove.reviewTime = Date.now();
+                saveOrders(orders);
+                updateOrdersList();
+                swal("Thành công!", "Đơn hàng đã được duyệt!", "success");
+            }
+        }
+
+        function submitDeliveryTime(deviceUID) {
+            const deliveryTimeInput = document.getElementById(`deliveryTimeInput-${deviceUID}`).value;
+            if (deliveryTimeInput) {
+                let orders = JSON.parse(localStorage.getItem('orders')) || [];
+                let orderToSetTime = orders.find(order => order.deviceUID === deviceUID);
+                if (orderToSetTime) {
+                    orderToSetTime.deliveryTime = new Date(deliveryTimeInput).toISOString();
+                    saveOrders(orders);
+                    swal("Thành công!", "Thời gian nhận hàng đã được thiết lập!", "success");
+                    updateOrdersList();
+                    showOrderHistoryPopup();
+                }
+            } else {
+                swal("Lỗi!", "Bạn chưa chọn thời gian.", "error");
+            }
+        }
+
+        function deleteOrder(deviceUID) {
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders = orders.filter(order => order.deviceUID !== deviceUID);
+            saveOrders(orders);
+            showOrderHistoryPopup();
+            updateOrdersList();
+            swal("Thành công!", "Đơn hàng đã được xóa!", "success");
+        }
+
+        function closeOrderHistoryPopup() {
+            document.getElementById('orderHistoryModal').style.display = 'none';
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            checkLoginStatus();
+        });
+
+        window.onclick = function(event) {
+            const modals = [
+                document.getElementById('loginModal'),
+                document.getElementById('registerModal'),
+                document.getElementById('modal'),
+                document.getElementById('orderHistoryModal'),
+                document.getElementById('contactModal'),
+                document.getElementById('aboutUsModal'),
+                document.getElementById('reviewOrdersModal')
+            ];
+            modals.forEach(modal => {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            });
+        };
+    </script>
+</body>
+</html>
