@@ -9,6 +9,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    
+    <!-- Firebase Configuration -->
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyAg_BNxqyDJzCZ-Iext8rMiLP3e439TH-Q",
+        authDomain: "ghost-c88ce.firebaseapp.com",
+        projectId: "ghost-c88ce",
+        storageBucket: "ghost-c88ce.appspot.com",
+        messagingSenderId: "502003883327",
+        appId: "1:502003883327:web:cc04d5d955c45c0736478a",
+        measurementId: "G-DBMK6VPDM1"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+    </script>
+
     <style>
         body {
             font-family: 'Roboto', sans-serif;
@@ -489,7 +515,7 @@
             <div class="card">
                 <h2>Gói 3 88.888 /user paid via Paypal</h2>
                 <ul>
-                    <li style="color: #ff4500;">Bảo Hành 120 Ngày / Lỗi Một Đổi một</li>
+								<li style="color: #ff4500;">Bảo Hành 120 Ngày / Lỗi Một Đổi một</li>
                     <li>Chẳng có bất kỳ hạn chế nào đối với IP, blacklist, Ban, Paypal</li>
                     <li>Không bị giới hạn nội dung, không kết nối với bất kỳ trang web nào khác</li>
                     <li>Không có hạn</li>
@@ -499,7 +525,7 @@
             <div class="card">
                 <h2>Gói 4 140.000 /user paid via Paypal</h2>
                 <ul>
-                    <li style="color: #ff4500;">bảo hành 150 Ngày / lỗi một đổi một </li>
+                    <li style="color: #ff4500;">Bảo hành 150 Ngày / Lỗi một đổi một</li>
                     <li>Chẳng có bất kỳ hạn chế nào đối với IP, blacklist, Ban, Paypal</li>
                     <li>Không bị giới hạn nội dung, không kết nối với bất kỳ trang web nào khác</li>
                     <li>Không có hạn</li>
@@ -509,15 +535,16 @@
             <div class="card">
                 <h2>Gói 5 [ Lấy Ngay ] 222.222/user paid via Paypal</h2>
                 <ul>
-                    <li style="color: #ff4500;">bảo hành 250 Ngày / Lỗi Một Đổi một</li>
+                    <li style="color: #ff4500;">Bảo hành 250 Ngày / Lỗi Một Đổi một</li>
                     <li>Chẳng có bất kỳ hạn chế nào đối với IP, blacklist, Ban, Paypal</li>
                     <li>Không bị giới hạn nội dung, không kết nối với bất kỳ trang web nào khác</li>
-                    <li>Không có hạn</ul>
+                    <li>Không có hạn</li>
+                </ul>
                 <button onclick="showBankInfo('$222.222')">Mua ngay</button>
             </div>
         </div>
     </main>
-<footer>
+    <footer>
         <p>DVC IPA - M.O.D GAME IOS <a href="#">DVC IPA</a> | Telegram: <a href="#">DVC IPA</a></p>
     </footer>
     <!-- Modal HTML -->
@@ -549,7 +576,7 @@
             </form>
         </div>
     </div>
-    
+
     <!-- Order History Modal -->
     <div id="orderHistoryModal">
         <div id="orderHistoryModalContent">
@@ -835,7 +862,7 @@
                         <p class="order-item-p">Giờ mua: ${order.time}</p>
                         <p class="order-item-p">Trạng thái: ${order.status}</p>
                         <input type='datetime-local' class='input-time' id='deliveryTimeInput-${order.deviceUID}'>
-                        <button onclick="approveOrder('${order.deviceUID}')">Duyệt</button> 
+                        <button onclick="approveOrder('${order.deviceUID}')">Duyệt</button>
                         <button onclick="submitDeliveryTime('${order.deviceUID}')">Gửi</button>
                         ${deleteButton}
                     `;
@@ -900,6 +927,7 @@
                 document.getElementById('aboutUsModal'),
                 document.getElementById('reviewOrdersModal')
             ];
+
             modals.forEach(modal => {
                 if (event.target == modal) {
                     modal.style.display = "none";
